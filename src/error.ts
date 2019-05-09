@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
 
 export default (error: Error, req: Request, res: Response, next: any) => {
-  res.send('Opps... something\'s wrong: ' + error.message)
+  res.status(500).send('Opps... something wrong: ' + error.message)
 }
