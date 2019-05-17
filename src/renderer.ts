@@ -1,14 +1,32 @@
 import fs from 'fs'
 
-function render(template: string, params = {}) {
+let cache: Dictionary<string> = {}
+
+function compile(template: string, params = {}) {
   const keys = Object.keys(params)
   const values = Object.values(params)
   return new Function(...keys, 'return `' + template + '`')(...values)
 }
 
-export default (path: string, vars: object, callback: any) => {
-  fs.readFile(path, (error, content) => {
-    const rendered = render(content.toString(), vars)
-    return callback(null, rendered)
+function render(path: string, vars = {}) {
+  return new Promise((resolve, reject) => {
+    if (cache[path]) {
+      return resolve(compile(cache[path], vars))
+    }
+    fs.readFile(path, (error, blob) => {
+      if (error) {
+        return reject(error)
+      }
+      cache[path] = blob.toString()
+      resolve(compile(cache[path], vars))
+    })
   })
+}
+
+export default function(path: string, vars: object, callback: any) {
+  render(path, vars)
+    .then((result) => {
+      callback(null, result)
+    })
+    .catch(callback)
 }
