@@ -2,16 +2,16 @@ import express from 'express'
 import config from './config'
 import routes from './routes'
 import error from './error'
-import renderer from './renderer'
-import { promisify } from 'util'
+import renderer from './libs/renderer'
+import logger from './libs/logger'
 
 const app = express()
 
-app.render = promisify(app.render)
 app.locals = config.locals
 
 app.engine('html', renderer)
 app.set('view engine', 'html')
+app.set('trust proxy', true)
 app.use(express.static('public'))
 app.use(routes(app))
 app.use(error)

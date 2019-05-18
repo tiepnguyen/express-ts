@@ -1,8 +1,10 @@
 import { Router, Application } from 'express'
+import logger from './libs/logger'
 import Home from './controllers/Home'
 import About from './controllers/About'
 import NotFound from './controllers/NotFound'
 import Post from './controllers/Post'
+import ServerError from './controllers/ServerError'
 
 const router = Router()
 const routes: Route[] = [
@@ -13,6 +15,10 @@ const routes: Route[] = [
   {
     path: '/post',
     controller: Post,
+  },
+  {
+    path: '/error',
+    controller: ServerError,
   },
   {
     path: '/',
@@ -26,7 +32,7 @@ const routes: Route[] = [
 
 export default (app: Application) => {
   routes.map((route: Route) => {
-    const controller = new route.controller(app)
+    const controller = new route.controller(app, logger)
     router.all(route.path, (req, res, next) => controller.main(req, res, next))
   })
 
