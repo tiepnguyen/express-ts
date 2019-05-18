@@ -4,7 +4,7 @@ let { combine, simple, timestamp, printf, colorize } = format
 let logFormat = combine(
   timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   printf(({ level, message, timestamp }) => {
-    return [timestamp, level, message].map((item) => `"${item}"`).join(', ')
+    return [timestamp, level.toUpperCase() + ':', message].join(' ')
   }),
 )
 let logger = createLogger({
