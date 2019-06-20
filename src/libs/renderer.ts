@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-let cache: Dictionary<string> = {}
+const cache: Dictionary<string> = {}
 
 function compile(template: string, params = {}) {
   const keys = Object.keys(params)

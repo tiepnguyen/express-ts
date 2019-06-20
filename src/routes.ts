@@ -33,6 +33,7 @@ const routes: Route[] = [
 export default (app: Application) => {
   routes.map((route: Route) => {
     const controller = new route.controller(app, logger)
+    controller.db = 'doo'
     router.all(route.path, (req, res, next) => controller.main(req, res, next))
   })
 

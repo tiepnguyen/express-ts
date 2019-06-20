@@ -1,7 +1,7 @@
 import mariadb, { Connection, Pool, PoolConfig } from 'mariadb'
 
 export default class Database {
-  pool: Pool
+  private pool: Pool
 
   constructor(config: string | PoolConfig) {
     this.pool = mariadb.createPool(config)
@@ -21,7 +21,7 @@ export default class Database {
 
     try {
       connection = await this.getConnection()
-      let namedPlaceholders = !Array.isArray(params)
+      const namedPlaceholders = !Array.isArray(params)
       return await connection.query({ sql, namedPlaceholders, ...options }, params)
     } catch (error) {
       throw error
@@ -33,7 +33,7 @@ export default class Database {
   }
 
   async select(fields: string | string[], table: string, where?: any, orderBy?: string, limit?: number | number[]) {
-    let params = {}
+    const params = {}
     let sql = `SELECT ${fields} \nFROM ${table}`
 
     if (where) {
@@ -51,7 +51,7 @@ export default class Database {
   }
 
   async insert(table: string, params: any, onDuplicateUpdate = false) {
-    let data = Object.keys(params).map((key) => {
+    const data = Object.keys(params).map((key) => {
       return `${key} = :${key}`
     })
 
@@ -86,7 +86,7 @@ export default class Database {
 
   async delete(table: string, where?: any) {
     let sql = `DELETE FROM ${table}`
-    let params = {}
+    const params = {}
 
     if (where) {
       where = this.buildCondition(where, params)
@@ -98,12 +98,12 @@ export default class Database {
 
   buildCondition(where: any, params: Dictionary<any> = {}): string {
     if (Array.isArray(where)) {
-      let result = where.map((item) => {
+      const result = where.map((item) => {
         return this.buildCondition(item, params)
       })
       return `(${result.join(')\nAND (')})`
     } else if (typeof where === 'object') {
-      let result = Object.keys(where).map((key) => {
+      const result = Object.keys(where).map((key) => {
         params[key] = where[key]
         return `${key} = :${key}`
       })

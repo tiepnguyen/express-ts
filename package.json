@@ -16,6 +16,7 @@
   "author": "Tiep Nguyen",
   "license": "ISC",
   "dependencies": {
+    "tiep": "file:dist/foo/bar",
     "dotenv": "^8.0.0",
     "express": "^4.17.0",
     "mariadb": "^2.0.5",

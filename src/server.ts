@@ -3,7 +3,6 @@ import config from './config'
 import routes from './routes'
 import error from './error'
 import renderer from './libs/renderer'
-import logger from './libs/logger'
 
 const app = express()
 
